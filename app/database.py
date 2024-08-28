@@ -13,9 +13,11 @@ def get_db_context():
     finally:
         db.close()
 
+
 async def get_async_db_context():
     async with AsyncSessionLocal() as async_db:
         yield async_db
+
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 async_engine = create_async_engine(SQLALCHEMY_DATABASE_URL_ASYNC)

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db_context
 from schemas import User
-from models import UserViewModel, UserBaseModel
+from models.userModel import UserViewModel, UserBaseModel
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
