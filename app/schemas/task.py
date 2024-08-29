@@ -1,8 +1,9 @@
-import enum
-from sqlalchemy import Column, ForeignKey, SmallInteger, String, Uuid, Enum
-from sqlalchemy.orm import relationship
 from database import Base
+from sqlalchemy import Column, Enum, ForeignKey, SmallInteger, String, Uuid
+from sqlalchemy.orm import relationship
+
 from .base_entity import BaseEntity, TaskStatus
+
 
 class Task(BaseEntity, Base):
     __tablename__ = "tasks"

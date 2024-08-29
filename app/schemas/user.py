@@ -1,8 +1,11 @@
+from enum import Enum
+
 from database import Base
 from passlib.context import CryptContext
-from schemas.base_entity import BaseEntity
 from sqlalchemy import Boolean, Column, ForeignKey, String, Uuid
 from sqlalchemy.orm import relationship
+
+from .base_entity import BaseEntity, UserRole
 
 bcrypt_context = CryptContext(schemes=["bcrypt"])
 
@@ -17,7 +20,7 @@ class User(BaseEntity, Base):
     last_name = Column(String, nullable=False)
     password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
-    is_admin = Column(Boolean, default=False)
+    role = Column(Enum(UserRole), nullable=False, default=UserRole.USER)
     company_id = Column(Uuid, ForeignKey("company.id"))
 
     tasks = relationship("Task", back_populates="staff")
