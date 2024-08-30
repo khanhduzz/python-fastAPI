@@ -15,5 +15,5 @@ class Company(BaseEntity, Base):
     mode = Column(enum.Enum(CompanyMode), nullable=False, default=CompanyMode.ACTIVE)
     owner_id = Column(Uuid, ForeignKey("users.id"), nullable=False)
 
-    staff = relationship("User", back_populates="company")
-    owner = relationship("User", back_populates="company")
+    staffs = relationship("User", back_populates="employees")
+    owner = relationship("User", back_populates="owner")

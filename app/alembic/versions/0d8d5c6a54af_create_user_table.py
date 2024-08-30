@@ -33,7 +33,6 @@ def upgrade() -> None:
         sa.Column('password', sa.String, nullable=False),
         sa.Column('is_active', sa.Boolean, default=True),
         sa.Column('role', sa.Enum(UserRole), nullable=False, default=UserRole.USER),
-        sa.Column('company_id', sa.Uuid),
         sa.Column('created_at', sa.DateTime),
         sa.Column('updated_at', sa.DateTime)
     )

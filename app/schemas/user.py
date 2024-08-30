@@ -23,6 +23,8 @@ class User(BaseEntity, Base):
 
     tasks = relationship("Task")
     tasks_created = relationship("Task")
+    employees = relationship("Company")
+    owner = relationship("Company")
 
 
 def get_password_hash(password):
