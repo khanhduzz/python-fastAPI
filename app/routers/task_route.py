@@ -4,7 +4,7 @@ from uuid import UUID
 from database import get_db_context
 from fastapi import APIRouter, Depends, Query, status
 from models.task_model import SearchTaskModel, TaskModel, TaskViewModel
-from schemas import User
+from schemas import user as User
 from services import auth as AuthService
 from services import task_service as TaskService
 from services.exception import *

@@ -4,7 +4,7 @@ from uuid import UUID
 from database import get_async_db_context, get_db_context
 from fastapi import APIRouter, Depends, Query
 from models.user_model import SearchUserModel, UserBaseModel, UserModel, UserViewModel
-from schemas import User
+from schemas import user as User
 from services import auth as AuthService
 from services import user_service as UserService
 from services.exception import AccessDeniedError, ResourceNotFoundError

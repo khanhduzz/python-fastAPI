@@ -1,23 +1,23 @@
 import datetime
-import enum
+from enum import Enum
 import uuid
 
 from sqlalchemy import Column, DateTime, Uuid, event
 
 
-class Gender(enum.Enum):
+class Gender(Enum):
     NONE = "N"
     FEMALE = "F"
     MALE = "M"
 
 
-class CompanyMode(enum.Enum):
+class CompanyMode(Enum):
     ACTIVE = "A"
     INACTIVE = "I"
     SUSPENDED = "S"
 
 
-class TaskStatus(enum.Enum):
+class TaskStatus(Enum):
     DRAFT = "D"
     OPEN = "O"
     PROCESSING = "P"
@@ -25,7 +25,7 @@ class TaskStatus(enum.Enum):
     CANCELED = "C"
 
 
-class UserRole(enum.Enum):
+class UserRole(Enum):
     USER = "U"
     ADMIN = "A"
     SUPER_ADMIN = "S"

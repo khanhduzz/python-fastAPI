@@ -1,14 +1,12 @@
-from enum import Enum
 
 from database import Base
 from passlib.context import CryptContext
-from sqlalchemy import Boolean, Column, ForeignKey, String, Uuid
+from sqlalchemy import Boolean, Column, ForeignKey, String, Uuid, Enum
 from sqlalchemy.orm import relationship
 
 from .base_entity import BaseEntity, UserRole
 
 bcrypt_context = CryptContext(schemes=["bcrypt"])
-
 
 class User(BaseEntity, Base):
     __tablename__ = "users"
@@ -23,8 +21,8 @@ class User(BaseEntity, Base):
     role = Column(Enum(UserRole), nullable=False, default=UserRole.USER)
     company_id = Column(Uuid, ForeignKey("company.id"))
 
-    tasks = relationship("Task", back_populates="staff")
-    tasks_created = relationship("Task", back_populates="owner")
+    tasks = relationship("Task")
+    tasks_created = relationship("Task")
 
 
 def get_password_hash(password):

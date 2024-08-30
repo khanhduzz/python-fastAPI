@@ -5,7 +5,7 @@ from uuid import UUID
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from schemas import User, verify_password
+from schemas.user import User, verify_password
 from services.utils import get_current_utc_time
 from settings import JWT_ALGORITHM, JWT_SECRET
 from sqlalchemy import select
