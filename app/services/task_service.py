@@ -2,7 +2,7 @@ from typing import List
 from uuid import UUID
 
 from models.task_model import SearchTaskModel, TaskModel
-from schemas import Task
+from schemas.task import Task
 from services import user_service as UserService
 from services.exception import InvalidInputError, ResourceNotFoundError
 from services.utils import get_current_utc_time
@@ -33,7 +33,7 @@ def get_task_by_id(db: Session, id: UUID, /, joined_load=False) -> Task:
 
 
 def add_new_task(db: Session, data: TaskModel) -> Task:
-    owner = UserService.get_user_by_id(db, data.author_id)
+    owner = UserService.get_user_by_id(db, data.owner_id)
 
     if owner is None:
         raise InvalidInputError("Invalid owner information")

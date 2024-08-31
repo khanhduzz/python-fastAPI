@@ -4,6 +4,8 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from schemas.base_entity import UserRole
+
 
 class UserModel(BaseModel):
     username: str
@@ -25,9 +27,9 @@ class UserBaseModel(BaseModel):
 
 
 class UserViewModel(UserBaseModel):
-    is_admin: bool
+    role: UserRole
     created_at: datetime | None = None
-    update_at: datetime | None = None
+    updated_at: datetime | None = None
 
 
 class SearchUserModel:

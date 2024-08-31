@@ -24,7 +24,7 @@ def upgrade() -> None:
         sa.Column("name", sa.String, nullable=False),
         sa.Column("description", sa.String),
         sa.Column("mode", sa.Enum(CompanyMode)),
-        sa.Column("owner_id", sa.Uuid, nullable=False),
+        sa.Column("owner_id", sa.Uuid, nullable=True),
     )
     op.create_foreign_key(
         "fk_company_owner", "companies", "users", ["owner_id"], ["id"]

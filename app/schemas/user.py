@@ -19,12 +19,12 @@ class User(BaseEntity, Base):
     password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     role = Column(Enum(UserRole), nullable=False, default=UserRole.USER)
-    company_id = Column(Uuid, ForeignKey("company.id"))
+    # company_id = Column(Uuid, ForeignKey("company.id"))
 
-    tasks = relationship("Task")
-    tasks_created = relationship("Task")
-    employees = relationship("Company")
-    owner = relationship("Company")
+    tasks = relationship("Task", back_populates="staff", foreign_keys="Task.staff_id")
+    tasks_created = relationship("Task", back_populates="owner" , foreign_keys="Task.owner_id")
+    # company = relationship("Company")
+    # companies = relationship("Company")
 
 
 def get_password_hash(password):

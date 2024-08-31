@@ -4,10 +4,11 @@ from uuid import UUID
 from database import get_async_db_context, get_db_context
 from fastapi import APIRouter, Depends, Query
 from models.user_model import SearchUserModel, UserBaseModel, UserModel, UserViewModel
-from schemas import user as User
+from schemas.user import User
 from services import auth as AuthService
 from services import user_service as UserService
 from services.exception import AccessDeniedError, ResourceNotFoundError
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 from starlette import status
@@ -16,8 +17,8 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.get("/auth", status_code=status.HTTP_200_OK, response_model=List[UserBaseModel])
-async def get_user(db: Session = Depends(get_db_context)) -> List[UserViewModel]:
-    return db.query(User).filter(User.is_active == True).all()
+async def get_users(db: Session = Depends(get_db_context)) -> List[UserViewModel]:
+    return db.scalars(select(User).filter_by(role = "ADMIN")).all()
 
 
 @router.get("", response_model=list[UserViewModel])
@@ -30,7 +31,7 @@ async def get_all_users(
     async_db: AsyncSession = Depends(get_async_db_context),
     user: User = Depends(AuthService.token_interceptor),
 ):
-    if not user.is_admin:
+    if user.role != "ADMIN":
         raise AccessDeniedError()
     conds = SearchUserModel(full_name, email, company_id, page, size)
     return await UserService.get_users(async_db)
@@ -52,7 +53,7 @@ async def create_user(
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
 ):
-    if not user.is_admin:
+    if user.role != "ADMIN":
         raise AccessDeniedError()
     return UserService.add_new_user(db, request)
 
@@ -64,7 +65,7 @@ async def update_user(
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
 ):
-    if not user.is_admin:
+    if user.role != "ADMIN":
         raise AccessDeniedError()
     return UserService.update_user(db, user_id, request)
 
@@ -75,6 +76,6 @@ async def delete_user(
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
 ):
-    if not user.is_admin:
+    if user.role != "ADMIN":
         raise AccessDeniedError()
     UserService.delete_user(db, user_id)

@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from models.user_model import UserModel
-from schemas import User
+from schemas.user import User
 from services import utils
 from services.exception import ResourceNotFoundError
 from sqlalchemy import select
