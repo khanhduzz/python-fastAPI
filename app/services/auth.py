@@ -20,7 +20,7 @@ def create_access_token(user: User, expires: Optional[timedelta] = None):
         "id": str(user.id),
         "first_name": user.first_name,
         "last_name": user.last_name,
-        "role": user.role,
+        "role": user.role.value,
     }
     expire = (
         get_current_utc_time() + expires

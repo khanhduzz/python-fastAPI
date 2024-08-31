@@ -16,7 +16,7 @@ from starlette import status
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.get("/auth", status_code=status.HTTP_200_OK, response_model=List[UserBaseModel])
+@router.get("/me", status_code=status.HTTP_200_OK, response_model=List[UserBaseModel])
 async def get_users(db: Session = Depends(get_db_context)) -> List[UserViewModel]:
     return db.scalars(select(User).filter_by(role = "ADMIN")).all()
 

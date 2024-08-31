@@ -26,7 +26,7 @@ async def get_all_tasks(
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
 ):
-    if not user.is_admin:
+    if user.role != "ADMIN":
         raise AccessDeniedError()
 
     conds = SearchTaskModel(summary, staff_id, owner_id, page, size)
@@ -67,6 +67,6 @@ async def update_task(
     task = TaskService.get_task_by_id(db, task_id, joined_load=True)
     if task is None:
         raise ResourceNotFoundError()
-    if not ((user and task.owner != user) or user.is_admin):
+    if not ((user and task.owner != user) or user.role != "ADMIN"):
         raise AccessDeniedError()
     return TaskService.update_task(db, task_id, request)
