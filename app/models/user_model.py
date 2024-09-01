@@ -10,6 +10,7 @@ from schemas.base_entity import UserRole
 class UserModel(BaseModel):
     username: str
     email: Optional[str]
+    password: str
     full_name: str
     first_name: str
     last_name: str

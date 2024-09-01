@@ -26,9 +26,9 @@ class TaskStatus(Enum):
 
 
 class UserRole(Enum):
-    USER = "U"
-    ADMIN = "A"
-    SUPER_ADMIN = "S"
+    USER = "USER"
+    ADMIN = "ADMIN"
+    SUPER_ADMIN = "SUPER_ADMIN"
 
 
 class BaseEntity:

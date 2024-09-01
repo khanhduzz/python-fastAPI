@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from models.user_model import UserModel
-from schemas.user import User
+from schemas.user import User, get_password_hash
 from services import utils
 from services.exception import ResourceNotFoundError
 from sqlalchemy import select
@@ -24,6 +24,7 @@ def add_new_user(db: Session, data: UserModel) -> User:
 
     user.created_at = utils.get_current_utc_time()
     user.updated_at = utils.get_current_utc_time()
+    user.password = get_password_hash(data.password)
 
     db.add(user)
     db.commit()

@@ -1,6 +1,7 @@
 from typing import List
 from uuid import UUID
 
+from schemas.base_entity import UserRole
 from database import get_async_db_context, get_db_context
 from fastapi import APIRouter, Depends, Query
 from models.user_model import SearchUserModel, UserBaseModel, UserModel, UserViewModel
@@ -17,7 +18,7 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.get("/me", status_code=status.HTTP_200_OK, response_model=List[UserBaseModel])
-async def get_users(db: Session = Depends(get_db_context)) -> List[UserViewModel]:
+async def get_user(db: Session = Depends(get_db_context)) -> List[UserViewModel]:
     return db.scalars(select(User).filter_by(role = "ADMIN")).all()
 
 
@@ -32,6 +33,7 @@ async def get_all_users(
     user: User = Depends(AuthService.token_interceptor),
 ):
     if user.role != "ADMIN":
+        print(user.role)
         raise AccessDeniedError()
     conds = SearchUserModel(full_name, email, company_id, page, size)
     return await UserService.get_users(async_db)
