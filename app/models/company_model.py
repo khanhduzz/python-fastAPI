@@ -15,6 +15,7 @@ class CompanyModel(BaseModel):
     name: str
     description: str
     mode = CompanyMode = Field(default = CompanyMode.ACTIVE)
+    owner_id = UUID
     
     class Config:
         json_schema_extra = {

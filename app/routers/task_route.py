@@ -26,7 +26,7 @@ async def get_all_tasks(
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
 ):
-    if user.role != "ADMIN":
+    if user.role != "ADMIN" or user.role != "USER":
         raise AccessDeniedError()
 
     conds = SearchTaskModel(summary, staff_id, owner_id, page, size)
@@ -39,7 +39,7 @@ async def create_task(
     user: User = Depends(AuthService.token_interceptor),
     db: Session = Depends(get_db_context),
 ):
-    if not user:
+    if user.role != "ADMIN" or user.role != "USER":
         raise AccessDeniedError()
 
     request.owner_id = user.id

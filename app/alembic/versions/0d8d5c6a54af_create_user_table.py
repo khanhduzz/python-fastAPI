@@ -47,7 +47,7 @@ def upgrade() -> None:
             "last_name": "bond",
             "password": get_password_hash(ADMIN_DEFAULT_PASSWORD),
             "is_active": True,
-            "role": "ADMIN",
+            "role": UserRole.ADMIN,
             "created_at": datetime.now(timezone.utc),
             "updated_at": datetime.now(timezone.utc)
         }
