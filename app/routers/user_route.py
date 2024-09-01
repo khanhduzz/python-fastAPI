@@ -33,7 +33,6 @@ async def get_all_users(
     user: User = Depends(AuthService.token_interceptor),
 ):
     if user.role != "ADMIN":
-        print(user.role)
         raise AccessDeniedError()
     conds = SearchUserModel(full_name, email, company_id, page, size)
     return await UserService.get_users(async_db)

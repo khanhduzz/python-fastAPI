@@ -29,6 +29,8 @@ def upgrade() -> None:
         sa.Column("priority", sa.SmallInteger, nullable=False, default=0),
         sa.Column("staff_id", sa.Uuid),
         sa.Column("owner_id", sa.Uuid, nullable=False),
+        sa.Column('created_at', sa.DateTime),
+        sa.Column('updated_at', sa.DateTime)
     )
     op.create_foreign_key("fk_task_owner", "tasks", "users", ["owner_id"], ["id"])
     op.create_foreign_key("fk_task_staff", "tasks", "users", ["staff_id"], ["id"])

@@ -25,6 +25,8 @@ def upgrade() -> None:
         sa.Column("description", sa.String),
         sa.Column("mode", sa.Enum(CompanyMode)),
         sa.Column("owner_id", sa.Uuid, nullable=True),
+        sa.Column('created_at', sa.DateTime),
+        sa.Column('updated_at', sa.DateTime)
     )
     op.create_foreign_key(
         "fk_company_owner", "companies", "users", ["owner_id"], ["id"]
