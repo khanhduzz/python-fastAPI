@@ -15,5 +15,5 @@ class Task(BaseEntity, Base):
     staff_id = Column(Uuid, ForeignKey("users.id"))
     owner_id = Column(Uuid, ForeignKey("users.id"), nullable=False)
 
-    staff = relationship("User", back_populates="tasks", foreign_keys="Task.staff_id")
-    owner = relationship("User", back_populates="tasks_created", foreign_keys="Task.owner_id")
+    # staff = relationship("User", back_populates="tasks", foreign_keys="Task.staff_id")
+    # owner = relationship("User", back_populates="tasks_created", foreign_keys="Task.owner_id")
