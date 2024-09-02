@@ -1,5 +1,6 @@
+from typing import Optional
 from pydantic import BaseModel, Field
-from sqlalchemy import UUID
+from uuid import UUID
 
 from schemas.company import CompanyMode
 
@@ -13,16 +14,17 @@ class SearchCompanyModel():
 
 class CompanyModel(BaseModel):
     name: str
-    description: str
-    mode = CompanyMode = Field(default = CompanyMode.ACTIVE)
-    owner_id = UUID
+    description: Optional[str]
+    mode: CompanyMode = Field(default=CompanyMode.ACTIVE)
+    owner_id: UUID
     
     class Config:
         json_schema_extra = {
             'example': {
                 "name": "NashTech",
                 "description": "Delivering technology excellence",
-                "mode": "ACTIVE"
+                "mode": "ACTIVE",
+                "owner_id": "123e4567-e89b-12d3-a456-426614174000",
             }
         }
 
@@ -30,4 +32,8 @@ class CompanyViewModel(BaseModel):
     id: UUID
     name: str
     description: str | None = None
-    mode = CompanyMode | CompanyMode.ACTIVE = CompanyMode.ACTIVE
+    mode: CompanyMode
+    owner_id: UUID
+    
+    class Config:
+        from_attributes: True
