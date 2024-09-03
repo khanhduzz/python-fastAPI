@@ -23,9 +23,9 @@ class User(BaseEntity, Base):
 
     tasks = relationship("Task")
     tasks_created = relationship("Task")
-    # tasks = relationship("Task", back_populates="staff", foreign_keys="Task.staff_id")
-    # tasks_created = relationship("Task", back_populates="owner" , foreign_keys="Task.owner_id")
-    # company = relationship("Company", back_populates="staffs")
+    tasks = relationship("Task", back_populates="staff", foreign_keys="Task.staff_id")
+    tasks_created = relationship("Task", back_populates="owner" , foreign_keys="Task.owner_id")
+    company = relationship("Company", back_populates="staffs")
     companies = relationship("Company")
 
 

@@ -4,7 +4,6 @@ from routers import auth, task_route, company_route
 
 app = FastAPI()
 
-app.include_router(user_route.router)
 app.include_router(task_route.router)
 app.include_router(user_route.router)
 app.include_router(auth.router)
