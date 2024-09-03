@@ -1,5 +1,6 @@
 from typing import List
-from sqlalchemy import UUID, select
+from uuid import UUID
+from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
 from services.exception import InvalidInputError, ResourceNotFoundError
@@ -8,6 +9,9 @@ from models.company_model import CompanyModel, SearchCompanyModel
 from services import user_service as UserService
 
 def get_companies(db: Session, conds: SearchCompanyModel) -> List[Company]:
+    
+    query = select(Company)
+    
     if conds.name is not None:
         query = query.filter(Company.name.like(f"{conds.name}%"))
     if conds.mode is not None:

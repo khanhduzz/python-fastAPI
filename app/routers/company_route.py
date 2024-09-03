@@ -23,7 +23,7 @@ async def get_all_companies(
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor)
 ):
-    if user.role != "ADMIN" or user.role != "USER":
+    if user.role != "ADMIN" and user.role != "USER":
         raise AccessDeniedError()
     
     conds = SearchCompanyModel(name, mode, page, size)
