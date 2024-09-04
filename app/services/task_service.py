@@ -11,6 +11,9 @@ from sqlalchemy.orm import Session, joinedload
 
 
 def get_tasks(db: Session, conds: SearchTaskModel) -> List[Task]:
+    
+    query = select(Task)
+    
     if conds.summary is not None:
         query = query.filter(Task.summary.like(f"{conds.summary}%"))
     if conds.staff_id is not None:

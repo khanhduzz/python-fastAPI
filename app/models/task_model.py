@@ -45,7 +45,7 @@ class TaskViewModel(BaseModel):
     priority: int
     staff_id: UUID | None = None
     owner_id: UUID
-    staff: UserBaseModel | UserBaseModel
+    staff: UserBaseModel | None
     owner: UserBaseModel | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None

@@ -1,10 +1,12 @@
 from typing import List
 from uuid import UUID
 
+from sqlalchemy import select
+
 from database import get_db_context
 from fastapi import APIRouter, Depends, Query, status
 from models.task_model import SearchTaskModel, TaskModel, TaskViewModel
-from schemas import user as User
+from schemas.user import User
 from services import auth as AuthService
 from services import task_service as TaskService
 from services.exception import *
@@ -26,7 +28,7 @@ async def get_all_tasks(
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
 ):
-    if user.role != "ADMIN" or user.role != "USER":
+    if user.role != "ADMIN" and user.role != "USER":
         raise AccessDeniedError()
 
     conds = SearchTaskModel(summary, staff_id, owner_id, page, size)
@@ -39,7 +41,7 @@ async def create_task(
     user: User = Depends(AuthService.token_interceptor),
     db: Session = Depends(get_db_context),
 ):
-    if user.role != "ADMIN" or user.role != "USER":
+    if user.role != "ADMIN" and user.role != "USER":
         raise AccessDeniedError()
 
     request.owner_id = user.id
