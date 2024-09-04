@@ -15,3 +15,4 @@ class Company(BaseEntity, Base):
     owner_id = Column(Uuid, ForeignKey("users.id"), nullable=False)
 
     owner = relationship("User", back_populates="companies_created", foreign_keys=[owner_id])
+    staffs = relationship("User", back_populates="company", foreign_keys="User.company_id")

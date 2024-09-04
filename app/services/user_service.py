@@ -1,19 +1,27 @@
+from typing import List
 from uuid import UUID
 
-from models.user_model import UserModel
+from models.user_model import SearchUserModel, UserModel
 from schemas.user import User, get_password_hash
 from services import utils
 from services.exception import ResourceNotFoundError
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 
-async def get_users(async_db: AsyncSession) -> list[User]:
-    result = await async_db.scalars(select(User).order_by(User.created_at))
+def get_users(db: Session, conds: SearchUserModel) -> List[User]:
+    query = select(User)
 
-    return result.all()
-
+    if conds.company_id is not None:
+        query = query.filter(User.company_id == conds.company_id)
+    if conds.email is not None:
+        query = query.filter(User.email.like(f"{conds.email}%"))
+    if conds.full_name is not None:
+        query = query.filter(User.full_name.like(f"{conds.full_name}%"))
+        
+    query.offset((conds.page-1)*conds.size).limit(conds.size)
+    
+    return db.scalars(query).all()
 
 def get_user_by_id(db: Session, user_id: UUID) -> User:
     return db.scalars(select(User).filter(User.id == user_id)).first()
