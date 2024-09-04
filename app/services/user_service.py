@@ -18,10 +18,11 @@ def get_users(db: Session, conds: SearchUserModel) -> List[User]:
         query = query.filter(User.email.ilike(f"%{conds.email}%"))
     if conds.full_name is not None:
         query = query.filter(User.full_name.ilike(f"%{conds.full_name}%"))
-        
-    query = query.offset((conds.page-1)*conds.size).limit(conds.size)
-    
+
+    query = query.offset((conds.page - 1) * conds.size).limit(conds.size)
+
     return db.scalars(query).all()
+
 
 def get_user_by_id(db: Session, user_id: UUID) -> User:
     return db.scalars(select(User).filter(User.id == user_id)).first()
@@ -51,7 +52,7 @@ def update_user(db: Session, id: UUID, data: UserModel) -> User:
     user.first_name = data.first_name
     user.last_name = data.last_name
     user.full_name = data.full_name
-    user.updated_at = utils.get_current_utc_time()
+    user.company_id = data.company_id
 
     db.commit()
     db.refresh(user)

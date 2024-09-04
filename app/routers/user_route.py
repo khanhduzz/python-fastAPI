@@ -15,14 +15,8 @@ from starlette import status
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.get("/me", status_code=status.HTTP_200_OK, response_model=List[UserBaseModel])
-async def get_user(db: Session = Depends(get_db_context)) -> List[UserViewModel]:
-    # return db.scalars(select(User).filter_by(role = "ADMIN")).all()
-    return db.query(User).filter(User.role == "ADMIN").all()
-
-
 @router.get("", status_code=status.HTTP_200_OK, response_model=List[UserViewModel])
-async def get_users(
+async def get_all_users(
     full_name: str = Query(default=None),
     email: str = Query(default=None),
     company_id: UUID = Query(default=None),
@@ -33,7 +27,7 @@ async def get_users(
 ):
     if user.role != "ADMIN":
         raise AccessDeniedError()
-    
+
     conds = SearchUserModel(full_name, email, company_id, page, size)
     return UserService.get_users(db, conds)
 

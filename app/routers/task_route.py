@@ -1,8 +1,6 @@
 from typing import List
 from uuid import UUID
 
-from sqlalchemy import select
-
 from database import get_db_context
 from fastapi import APIRouter, Depends, Query, status
 from models.task_model import SearchTaskModel, TaskModel, TaskViewModel
@@ -10,6 +8,7 @@ from schemas.user import User
 from services import auth as AuthService
 from services import task_service as TaskService
 from services.exception import *
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
@@ -27,12 +26,12 @@ async def get_all_tasks(
     size: int = Query(ge=1, le=50, default=10),
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
-    ):
-        if user.role != "ADMIN" and user.role != "USER":
-            raise AccessDeniedError()
+):
+    if user.role != "ADMIN" and user.role != "USER":
+        raise AccessDeniedError()
 
-        conds = SearchTaskModel(summary, staff_id, owner_id, page, size)
-        return TaskService.get_tasks(db, conds)
+    conds = SearchTaskModel(summary, staff_id, owner_id, page, size)
+    return TaskService.get_tasks(db, conds)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=TaskViewModel)
@@ -40,13 +39,13 @@ async def create_task(
     request: TaskModel,
     user: User = Depends(AuthService.token_interceptor),
     db: Session = Depends(get_db_context),
-    ):
-        if user.role != "ADMIN" and user.role != "USER":
-            raise AccessDeniedError()
+):
+    if user.role != "ADMIN" and user.role != "USER":
+        raise AccessDeniedError()
 
-        request.owner_id = user.id
+    request.owner_id = user.id
 
-        return TaskService.add_new_task(db, request)
+    return TaskService.add_new_task(db, request)
 
 
 @router.get("/{task_id}", response_model=TaskViewModel)
@@ -65,10 +64,21 @@ async def update_task(
     request: TaskModel,
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
-    ):
-        task = TaskService.get_task_by_id(db, task_id, joined_load=True)
-        if task is None:
-            raise ResourceNotFoundError()
-        if not ((user and task.owner != user) or user.role != "ADMIN"):
-            raise AccessDeniedError()
-        return TaskService.update_task(db, task_id, request)
+):
+    task = TaskService.get_task_by_id(db, task_id, joined_load=True)
+    if task is None:
+        raise ResourceNotFoundError()
+    if not ((user and task.owner != user) or user.role != "ADMIN"):
+        raise AccessDeniedError()
+    return TaskService.update_task(db, task_id, request)
+
+
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_one_task(
+    task_id: UUID,
+    db: Session = Depends(get_db_context),
+    user: User = Depends(AuthService.token_interceptor),
+):
+    if user.role != "ADMIN":
+        raise AccessDeniedError()
+    TaskService.delete_task(db, task_id)

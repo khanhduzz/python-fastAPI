@@ -54,7 +54,7 @@ def update_task(db: Session, id: UUID, data: TaskModel) -> Task:
     if task is None:
         raise ResourceNotFoundError()
 
-    if data.owner_id != task.owner_id:
+    if data.owner_id is not None and data.owner_id != task.owner_id:
         owner = UserService.get_user_by_id(db, data.owner_id)
         if owner is None:
             raise InvalidInputError("Invalid owner information")
@@ -69,3 +69,12 @@ def update_task(db: Session, id: UUID, data: TaskModel) -> Task:
     db.refresh(task)
 
     return task
+
+def delete_task(db: Session, id: UUID) -> None:
+    task = get_task_by_id(db, id)
+
+    if task is None:
+        raise ResourceNotFoundError()
+
+    db.delete(task)
+    db.commit()

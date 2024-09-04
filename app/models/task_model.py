@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
-from models.user_model import UserBaseModel
+from models.user_model import UserTaskModel
 from pydantic import BaseModel, Field
 from schemas.task import TaskStatus
 
@@ -17,12 +17,12 @@ class SearchTaskModel:
 
 
 class TaskModel(BaseModel):
-    summary: str
-    description: Optional[str]
+    summary: str = Field(max_length=255)
+    description: Optional[str] = Field(max_length=1024)
     status: TaskStatus = Field(default=TaskStatus.DRAFT)
-    priority: int = Field(default=1)
+    priority: int = Field(default=1, ge=1, le=10)
     staff_id: Optional[UUID] = None
-    owner_id: UUID
+    owner_id: Optional[UUID] = None
 
     class Config:
         json_schema_extra = {
@@ -31,8 +31,7 @@ class TaskModel(BaseModel):
                 "description": "Use Python with FastAPI to create a website about staffs and tasks management",
                 "status": "DRAFT",
                 "priority": 1,
-                "staff_id": "123e4567-e89b-12d3-a456-426614174000",
-                "owner_id": "123e4567-e89b-12d3-a456-426614174000",
+                "staff_id": "123e4567-e89b-12d3-a456-426614174000"
             }
         }
 
@@ -43,10 +42,9 @@ class TaskViewModel(BaseModel):
     description: str | None = None
     status: TaskStatus
     priority: int
-    staff_id: UUID | None = None
     owner_id: UUID
-    staff: UserBaseModel | None
-    owner: UserBaseModel | None = None
+    staff: UserTaskModel | None
+    owner: UserTaskModel | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 

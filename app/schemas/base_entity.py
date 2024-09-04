@@ -6,23 +6,23 @@ from sqlalchemy import Column, DateTime, Uuid, event
 
 
 class Gender(Enum):
-    NONE = "N"
-    FEMALE = "F"
-    MALE = "M"
+    NONE = "NONE"
+    FEMALE = "FEMALE"
+    MALE = "MALE"
 
 
 class CompanyMode(Enum):
-    ACTIVE = "A"
-    INACTIVE = "I"
-    SUSPENDED = "S"
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    SUSPENDED = "SUSPENDED"
 
 
 class TaskStatus(Enum):
-    DRAFT = "D"
-    OPEN = "O"
-    PROCESSING = "P"
-    CLOSED = "P"
-    CANCELED = "C"
+    DRAFT = "DRAFT"
+    OPEN = "OPEN"
+    PROCESSING = "PROCESSING"
+    CLOSED = "CLOSED"
+    CANCELED = "CANCELED"
 
 
 class UserRole(Enum):

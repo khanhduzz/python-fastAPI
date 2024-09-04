@@ -14,6 +14,22 @@ class UserModel(BaseModel):
     full_name: str
     first_name: str
     last_name: str
+    company_id: Optional[UUID] | None
+    role: str | None
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "username": "david_malan",
+                "email": "david@havard.com",
+                "password": "password",
+                "full_name": "David Malan",
+                "first_name": "David",
+                "last_name": "Malan",
+                "company_id": "123e4567-e89b-12d3-a456-426614174000",
+                "role": "USER",
+            }
+        }
 
 
 class UserBaseModel(BaseModel):
@@ -22,10 +38,14 @@ class UserBaseModel(BaseModel):
     email: str | None = None
     first_name: str
     last_name: str
+    company_id: Optional[UUID]
 
     class Config:
         from_attributes = True
 
+class UserTaskModel(BaseModel):
+    id: UUID
+    username: str
 
 class UserViewModel(UserBaseModel):
     role: UserRole
