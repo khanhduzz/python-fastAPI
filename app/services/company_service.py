@@ -13,11 +13,11 @@ def get_companies(db: Session, conds: SearchCompanyModel) -> List[Company]:
     query = select(Company)
     
     if conds.name is not None:
-        query = query.filter(Company.name.like(f"{conds.name}%"))
+        query = query.filter(Company.name.ilike(f"%{conds.name}%"))
     if conds.mode is not None:
         query = query.filter(Company.mode.value == conds.mode.value)
         
-    query.offset((conds.page - 1) * conds.size).limit(conds.size)
+    query = query.offset((conds.page - 1) * conds.size).limit(conds.size)
     
     return db.scalars(query).all()
 

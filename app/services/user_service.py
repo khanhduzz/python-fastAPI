@@ -15,11 +15,11 @@ def get_users(db: Session, conds: SearchUserModel) -> List[User]:
     if conds.company_id is not None:
         query = query.filter(User.company_id == conds.company_id)
     if conds.email is not None:
-        query = query.filter(User.email.like(f"{conds.email}%"))
+        query = query.filter(User.email.ilike(f"%{conds.email}%"))
     if conds.full_name is not None:
-        query = query.filter(User.full_name.like(f"{conds.full_name}%"))
+        query = query.filter(User.full_name.ilike(f"%{conds.full_name}%"))
         
-    query.offset((conds.page-1)*conds.size).limit(conds.size)
+    query = query.offset((conds.page-1)*conds.size).limit(conds.size)
     
     return db.scalars(query).all()
 

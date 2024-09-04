@@ -5,23 +5,21 @@ from models.task_model import SearchTaskModel, TaskModel
 from schemas.task import Task
 from services import user_service as UserService
 from services.exception import InvalidInputError, ResourceNotFoundError
-from services.utils import get_current_utc_time
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
 
 def get_tasks(db: Session, conds: SearchTaskModel) -> List[Task]:
-    
     query = select(Task)
     
     if conds.summary is not None:
-        query = query.filter(Task.summary.like(f"{conds.summary}%"))
+        query = query.filter(Task.summary.ilike(f"%{conds.summary}%"))
     if conds.staff_id is not None:
         query = query.filter(Task.staff_id == conds.staff_id)
     if conds.owner_id is not None:
         query = query.filter(Task.owner_id == conds.owner_id)
 
-    query.offset((conds.page - 1) * conds.size).limit(conds.size)
+    query = query.offset((conds.page - 1) * conds.size).limit(conds.size)
 
     return db.scalars(query).all()
 

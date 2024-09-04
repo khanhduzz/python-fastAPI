@@ -27,12 +27,12 @@ async def get_all_tasks(
     size: int = Query(ge=1, le=50, default=10),
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
-):
-    if user.role != "ADMIN" and user.role != "USER":
-        raise AccessDeniedError()
+    ):
+        if user.role != "ADMIN" and user.role != "USER":
+            raise AccessDeniedError()
 
-    conds = SearchTaskModel(summary, staff_id, owner_id, page, size)
-    return TaskService.get_tasks(db, conds)
+        conds = SearchTaskModel(summary, staff_id, owner_id, page, size)
+        return TaskService.get_tasks(db, conds)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=TaskViewModel)
@@ -40,13 +40,13 @@ async def create_task(
     request: TaskModel,
     user: User = Depends(AuthService.token_interceptor),
     db: Session = Depends(get_db_context),
-):
-    if user.role != "ADMIN" and user.role != "USER":
-        raise AccessDeniedError()
+    ):
+        if user.role != "ADMIN" and user.role != "USER":
+            raise AccessDeniedError()
 
-    request.owner_id = user.id
+        request.owner_id = user.id
 
-    return TaskService.add_new_task(db, request)
+        return TaskService.add_new_task(db, request)
 
 
 @router.get("/{task_id}", response_model=TaskViewModel)
@@ -65,10 +65,10 @@ async def update_task(
     request: TaskModel,
     db: Session = Depends(get_db_context),
     user: User = Depends(AuthService.token_interceptor),
-):
-    task = TaskService.get_task_by_id(db, task_id, joined_load=True)
-    if task is None:
-        raise ResourceNotFoundError()
-    if not ((user and task.owner != user) or user.role != "ADMIN"):
-        raise AccessDeniedError()
-    return TaskService.update_task(db, task_id, request)
+    ):
+        task = TaskService.get_task_by_id(db, task_id, joined_load=True)
+        if task is None:
+            raise ResourceNotFoundError()
+        if not ((user and task.owner != user) or user.role != "ADMIN"):
+            raise AccessDeniedError()
+        return TaskService.update_task(db, task_id, request)
