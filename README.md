@@ -1,5 +1,7 @@
 # Python FastAPI
 A FastAPI mini application to learn how to use FastAPI with SQLAlchemy and PostGreSQL.
+- Admin username: james
+- Admin password: depend on your .env setup
 
 # Sample Setup 
 - Create a virtual environment using `virtualenv` module in python.
